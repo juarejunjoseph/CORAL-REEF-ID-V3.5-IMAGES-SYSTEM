@@ -2,7 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+
+    <meta name="theme-color" content="#6200ee">
+    <meta name="description" content="Coral Reef Identification System using AI">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/c.r.i.s.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
     <title>Coral Reef Identification System</title>
     <!-- TensorFlow.js and Teachable Machine libraries -->
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
@@ -288,6 +298,18 @@
         let currentImage = null;
         let isRealtimeScanning = false;
         
+        // Initialize service worker
+        if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(registration => {
+          console.log('ServiceWorker registration successful');
+        })
+        .catch(err => {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+    });
+  }
         // Initialize
         async function init() {
             loadingContainer.classList.remove('hidden');
@@ -450,22 +472,69 @@
                 imageContainer.style.display = 'none';
                 videoContainer.style.display = 'flex';
                 stopScanButton.style.display = 'block';
-                
-                const stream = await navigator.mediaDevices.getUserMedia({
+        
+                // Check if running in secure context (HTTPS or localhost)
+                if (!window.isSecureContext) {
+                    throw new Error('Camera access requires HTTPS or localhost');
+                }
+        
+                // Check for mobile device
+                const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
+                // Configure constraints based on device type
+                const constraints = {
                     video: {
-                        facingMode: 'environment',
+                        facingMode: isMobile ? { exact: 'environment' } : 'environment',
                         width: { ideal: 1280 },
-                        height: { ideal: 720 }
+                        height: { ideal: 720 },
+                        frameRate: { ideal: 30 }
                     }
-                }).catch(() => navigator.mediaDevices.getUserMedia({ video: true }));
-                
+                };
+        
+                // First try to access the back camera
+                let stream = null;
+                try {
+                    stream = await navigator.mediaDevices.getUserMedia(constraints);
+                } catch (backCameraError) {
+                    console.log('Back camera failed, trying alternative:', backCameraError);
+                    
+                    // If back camera fails, try any available camera
+                    stream = await navigator.mediaDevices.getUserMedia({
+                        video: true
+                    });
+                }
+        
+                if (!stream) {
+                    throw new Error('No camera available');
+                }
+        
                 videoElement.srcObject = stream;
-                await new Promise(resolve => videoElement.onloadedmetadata = resolve);
+                
+                // Wait for video to be ready
+                await new Promise((resolve, reject) => {
+                    videoElement.onloadedmetadata = resolve;
+                    videoElement.onerror = reject;
+                });
+        
                 await videoElement.play();
+        
+                // Start the identification process
                 identifyFromVideo();
+        
             } catch (error) {
-                console.error('Error accessing camera:', error);
-                alert('Please allow camera access in your browser settings to use this feature.');
+                console.error('Camera access error:', error);
+                let errorMessage = 'Camera access failed. ';
+                
+                if (!window.isSecureContext) {
+                    errorMessage += 'Please use HTTPS or localhost. ';
+                }
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    errorMessage += 'Camera API not supported in this browser. ';
+                }
+                
+                errorMessage += 'Please check your camera permissions and try again.';
+                
+                alert(errorMessage);
                 stopRealtimeScan();
             }
         }
