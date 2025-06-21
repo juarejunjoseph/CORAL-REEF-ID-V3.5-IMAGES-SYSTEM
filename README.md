@@ -1,6 +1,9 @@
 # Coral Reef Identification System (React Native Langauge, Tensorflow.js (ANN)
 > Multiplatform you can use in any platform (Desktop, IOS and Android) browser based system.
 
+Install apk file for android >>> https://median.co/share/mplybl#apk
+For IOS or iphone users >>> https://coral-reef-idsys.netlify.app then tap the ***share*** button and tap the ***Add to Home Screen***
+
 Teachable Machine Link https://drive.google.com/file/d/10Al84vyUmX2KP0RwSx6-9PdMJCqvtMcs/view?usp=drive_link
 
 Deployed online with Netlify: [coral-reef-id-sys.netlify.app](https://coral-reef-id-sys.netlify.app/)
