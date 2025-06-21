@@ -6,7 +6,7 @@ For IOS or iphone users >>> https://coral-reef-idsys.netlify.app then tap the **
 
 Teachable Machine Link https://drive.google.com/file/d/10Al84vyUmX2KP0RwSx6-9PdMJCqvtMcs/view?usp=drive_link
 
-Deployed online with Netlify: [coral-reef-id-sys.netlify.app](https://coral-reef-id-sys.netlify.app/)
+Deployed online with Netlify: [coral-reef-idsys.netlify.app](https://coral-reef-idsys.netlify.app/)
 
 ## Instruction how to use?
 1.	The app is has a model to recognize the images of the Coral Reef but with some specific only and here is the following in list:
