@@ -66,11 +66,8 @@ a.	Google Drive Link https://drive.google.com/drive/folders/1S4BACGJzhvYS6ffsPpX
 
 4.	The App is programed with React native language and uploaded to the Github Repository	
 
-a.	https://github.com/juarejunjoseph/CORAL-REEF-ID-V3.3-IMAGE-SYSTEM.git
 
 ### Reference
 Coral Reef Images https://projectnoah.org/missions/philippine-coral-survey?page=1
-# CORAL-REEF-ID-V3.4-IMAGES-SYSTEM
-# CORAL-REEF-ID-V3.4-IMAGES-SYSTEM
-# CORAL-REEF-ID-V3.5-IMAGES-SYSTEM
+
 # CORAL-REEF-ID-V3.5-IMAGES-SYSTEM
