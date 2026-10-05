@@ -1,46 +1,21 @@
 {
-    "name": "imageid",
-    "version": "0.1.0",
-    "private": true,
-    "dependencies": {
-        "@tensorflow-models/mobilenet": "^2.0.4",
-        "@tensorflow/tfjs-converter": "^4.22.0",
-        "@tensorflow/tfjs-core": "^4.22.0",
-        "express": "^5.1.0",
-        "react": "^17.0.2",
-        "react-dom": "^17.0.2",
-        "react-scripts": "^5.0.1",
-        "sass": "^1.72.0"
-    },
-    "scripts": {
-        "start": "HTTPS=true react-scripts start",
-        "start-windows": "set HTTPS=true&&react-scripts start",
-        "build": "react-scripts build",
-        "build:dev": "set GENERATE_SOURCEMAP=true && react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject"
-    },
-    "eslintConfig": {
-        "extends": [
-            "react-app",
-            "react-app/jest"
-        ]
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    },
-    "devDependencies": {
-        "ajv": "^8.12.0",
-        "ajv-keywords": "^5.1.0",
-        "workbox-webpack-plugin": "^7.3.0"
-    }
+  "name": "coral-reef-id-v4",
+  "version": "4.0.0",
+  "private": true,
+  "description": "Philippine Coral Reef Identification System - mobile-first PWA powered by Teachable Machine and TensorFlow.js.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@teachablemachine/image": "^0.8.5",
+    "@tensorflow/tfjs": "^4.22.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "vite": "^8.3.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {}
 }
