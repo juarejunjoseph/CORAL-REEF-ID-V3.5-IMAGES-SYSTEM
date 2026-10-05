@@ -112,17 +112,41 @@ function App() {
     }
   }
 
-  function handleImageFile(file) {
+  async function handleImageFile(file) {
     if (!file) return;
-    const url = URL.createObjectURL(file);
-    setImageUrl((old) => {
-      if (old?.startsWith('blob:')) URL.revokeObjectURL(old);
-      return url;
+    try {
+      const dataUrl = await compressImage(file);
+      setImageUrl(dataUrl);
+      setResults([]);
+      setStableResult(null);
+      setScanState('ready');
+      setMode('photo');
+    } catch (error) {
+      console.error(error);
+      setModelError('The image could not be prepared. Try another photo file.');
+    }
+  }
+
+  function compressImage(file) {
+    return new Promise((resolve, reject) => {
+      const objectUrl = URL.createObjectURL(file);
+      const image = new Image();
+      image.onload = () => {
+        const maxDimension = 1280;
+        const scale = Math.min(1, maxDimension / Math.max(image.naturalWidth, image.naturalHeight));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
+        canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+        canvas.getContext('2d', { alpha: false }).drawImage(image, 0, 0, canvas.width, canvas.height);
+        URL.revokeObjectURL(objectUrl);
+        resolve(canvas.toDataURL('image/jpeg', 0.78));
+      };
+      image.onerror = () => {
+        URL.revokeObjectURL(objectUrl);
+        reject(new Error('Unable to decode image'));
+      };
+      image.src = objectUrl;
     });
-    setResults([]);
-    setStableResult(null);
-    setScanState('ready');
-    setMode('photo');
   }
 
   function openHistory(record) {
@@ -184,7 +208,7 @@ function App() {
   }
 
   async function runLivePrediction() {
-    if (!model || !videoRef.current || !canvasRef.current || !isLive) return;
+    if (!model || !videoRef.current || !canvasRef.current || !streamRef.current) return;
     if (videoRef.current.readyState < 2) return;
     const video = videoRef.current;
     const canvas = canvasRef.current;
