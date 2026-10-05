@@ -1,73 +1,65 @@
-# Coral Reef Identification System (React Native Langauge, Tensorflow.js (ANN)
-> Multiplatform you can use in any platform (Desktop, IOS and Android) browser based system.
+# Coral Reef Identification System V4
 
-Install apk file for android >>> https://median.co/share/mplybl#apk
-For IOS or iphone users >>> https://coral-reef-idsys.netlify.app then tap the ***share*** button and tap the ***Add to Home Screen***
+A redesigned, mobile-first PWA for AI-assisted identification of coral and associated reef organisms.
 
-Teachable Machine Link https://drive.google.com/file/d/10Al84vyUmX2KP0RwSx6-9PdMJCqvtMcs/view?usp=drive_link
+## What changed from V3.5
 
-Deployed online with Netlify: [coral-reef-idsys.netlify.app](https://coral-reef-idsys.netlify.app/)
+- Modern React + Vite structure
+- Mobile-first scanning UI
+- Gallery upload and camera capture
+- Live camera scanning with throttled inference
+- Stable live result based on multiple frames instead of every animation frame
+- Top-3 predictions with confidence labels
+- Low-confidence guidance instead of blindly treating the top class as certain
+- On-device scan history using localStorage
+- Species/reference catalog for the bundled model classes
+- Model manager for loading a newer Teachable Machine export directly in the browser
+- PWA manifest and service-worker support for offline-friendly use
+- Clear distinction between Anthozoa classes and associated reef organisms present in the trained model
 
-## Instruction how to use?
-1.	The app is has a model to recognize the images of the Coral Reef but with some specific only and here is the following in list:
-  a.	Bean Coral
+## Model
 
-  b.	Brain Coral
+The default model remains the existing Teachable Machine export in:
 
-  c.	Branching Frogspawn Coral
-  
-  d.	Bubble Coral
+\`public/coralimagemodel/model.json\`
+\`public/coralimagemodel/weights.bin\`
+\`public/coralimagemodel/metadata.json\`
 
-  e.	Bulb-tentacle Sea Anemone
-  
-  f.	Bush Coral
-  
-  g.	Cauliflower Coral
-  
-  h.	Cherry Blossom Coral
-  
-  i.	Colonial anemone zebra
-  
-  j.	Corallimorpharian Paracorynactis hoplites
-  
-  k.	Crown of Thorns Starfish
-  
-  l.	Cushion star
-  
-  m.	Elephant Ear Anemone
-  
-  n.	Favia coral
-  
-  o.	Finger Coral Acropora humilis
-  
-  p.	Flower pot coral
-  
-  q.	Formosa Coral  
-  
-  r.	Haeckel's Anemone
-  
-  s.	Hell's Fire Anemone
-  
-  t.	Knob Coral
-  
-  u.	Lace Coral
-  
-  v.	Lacy-head Leather Coral
-  
-  w.	Lettuce Coral
-  
-  x.	Mushroom coral
+The original export is a 24-class image model with 224px input.
 
-3.Provided Google drive link of the images that this will be the reference of the coral reefs the trained in the Teachable Machine or Tensorflow that will serve as ANN (Artificial Neural Network) that converted to a model then imported to the app that will use in offline mode. This is the heart of the app that functions the Image Recognition.
+The app also supports replacing the model at runtime by selecting the three export files from a matching Teachable Machine image-model export.
 
-a.	Google Drive Link https://drive.google.com/drive/folders/1S4BACGJzhvYS6ffsPpXkO3Q8vjAvYld2?usp=sharing 
+## Development
 
-***for testing purpose use two device (one laptop for Google drive Coral Reef Images and another device Phone(IOS or Android) this will use to scan the Coral Reef)***
+\`\`\`bash
+npm install
+npm run dev
+\`\`\`
 
-4.	The App is programed with React native language and uploaded to the Github Repository	
+For a production build:
 
+\`\`\`bash
+npm run build
+npm run preview
+\`\`\`
 
-### Reference
-Coral Reef Images https://projectnoah.org/missions/philippine-coral-survey?page=1
+## Deployment
 
-# CORAL-REEF-ID-V3.5-IMAGES-SYSTEM
+Compatible with Netlify.
+
+- Build command: \`npm run build\`
+- Publish directory: \`dist\`
+
+Camera access requires a secure context such as HTTPS (or localhost during development).
+
+## Philippine reef reference
+
+Reference catalog:
+
+https://likasmap.com/species/class/Anthozoa
+
+The LikasMap Anthozoa page is treated as a reference source for future taxonomy expansion. The bundled model's label set is not assumed to be taxonomically identical to the Anthozoa list; for example, the model also includes sea stars.
+
+## Important identification note
+
+The system is an AI-assisted visual classifier. A probability value is not a taxonomic certainty or field validation. For research, biodiversity records, or conservation decisions, verify observations using accepted taxonomic references and, when appropriate, expert review.
