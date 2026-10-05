@@ -5,6 +5,7 @@ import { coralSpecies } from './data/coralSpecies';
 const HISTORY_KEY = 'cris-v4-history';
 const LIVE_INTERVAL_MS = 450;
 const LIVE_WINDOW = 5;
+const MAX_HISTORY = 10;
 const CONFIDENCE_THRESHOLD = 0.60;
 
 function App() {
@@ -57,7 +58,11 @@ function App() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, 20)));
+    try {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, MAX_HISTORY)));
+    } catch (error) {
+      console.warn('Local history storage limit reached; the current session can still be used.', error);
+    }
   }, [history]);
 
   const selectedSpecies = useMemo(() => {
@@ -92,7 +97,7 @@ function App() {
       source,
       createdAt: new Date().toISOString(),
     };
-    setHistory((current) => [record, ...current.filter((item) => item.image !== image)].slice(0, 20));
+    setHistory((current) => [record, ...current.filter((item) => item.image !== image)].slice(0, MAX_HISTORY));
   }
 
   async function runPrediction(input, shouldSave = true, source = 'photo') {
@@ -132,14 +137,14 @@ function App() {
       const objectUrl = URL.createObjectURL(file);
       const image = new Image();
       image.onload = () => {
-        const maxDimension = 1280;
+        const maxDimension = 1024;
         const scale = Math.min(1, maxDimension / Math.max(image.naturalWidth, image.naturalHeight));
         const canvas = document.createElement('canvas');
         canvas.width = Math.max(1, Math.round(image.naturalWidth * scale));
         canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
         canvas.getContext('2d', { alpha: false }).drawImage(image, 0, 0, canvas.width, canvas.height);
         URL.revokeObjectURL(objectUrl);
-        resolve(canvas.toDataURL('image/jpeg', 0.78));
+        resolve(canvas.toDataURL('image/jpeg', 0.65));
       };
       image.onerror = () => {
         URL.revokeObjectURL(objectUrl);
